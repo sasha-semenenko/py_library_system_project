@@ -1,6 +1,7 @@
 from rest_framework import mixins, generics
 
 from books.models import Book
+from books.permissions import IsAdminOrIfAuthenticatedReadOnly
 from books.serializers import BookSerializer
 
 
@@ -15,6 +16,7 @@ class BookListView(mixins.ListModelMixin, generics.GenericAPIView):
 class BookCreateView(mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -27,6 +29,7 @@ class BookDetailView(
 ):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
